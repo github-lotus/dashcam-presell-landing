@@ -166,21 +166,27 @@ function buildAffiliateURL(baseUrl, ctaIndex) {
     const current = Object.fromEntries(new URLSearchParams(window.location.search));
     const allParams = {...stored, ...current};
     
-    // For beyondtrendshop checkout
-    const checkoutUrl = 'https://www.beyondtrendshop.com/COH-95T/dash-cam/mobile/checkout.php';
-    const url = new URL(checkoutUrl);
+    // Use everflow tracking URL
+    const url = new URL(baseUrl);
     
-    // Add parameters in the format they expect
-    url.searchParams.set('AFFID', '32'); // Your affiliate ID
-    url.searchParams.set('C1', allParams.campaign_id || allParams.sub1 || 'direct');
-    url.searchParams.set('C2', allParams.adgroup_id || allParams.sub2 || 'unknown');
-    url.searchParams.set('C3', allParams.creative_id || allParams.sub3 || `cta_${ctaIndex + 1}`);
-    url.searchParams.set('C4', allParams.tt_clid || allParams.ttclid || '');
-    url.searchParams.set('C5', `${allParams.device_type || getDeviceType()}_${allParams.placement || 'unknown'}`);
+    // Pass through TikTok and other tracking parameters
+    if (allParams.sub1) url.searchParams.set('sub1', allParams.sub1);
+    if (allParams.sub2) url.searchParams.set('sub2', allParams.sub2);
+    if (allParams.sub3) url.searchParams.set('sub3', allParams.sub3);
+    if (allParams.sub4) url.searchParams.set('sub4', allParams.sub4);
+    if (allParams.sub5) url.searchParams.set('sub5', allParams.sub5);
     
-    // Generate a proper click ID
-    const clickId = allParams.tt_clid || allParams.ttclid || generateClickId();
-    url.searchParams.set('click_id', clickId);
+    // TikTok specific parameters
+    if (allParams.ttclid || allParams.tt_clid) {
+        url.searchParams.set('ttclid', allParams.ttclid || allParams.tt_clid);
+    }
+    if (allParams.campaign_id) url.searchParams.set('campaign_id', allParams.campaign_id);
+    if (allParams.adgroup_id) url.searchParams.set('adgroup_id', allParams.adgroup_id);
+    if (allParams.creative_id) url.searchParams.set('creative_id', allParams.creative_id);
+    if (allParams.placement) url.searchParams.set('placement', allParams.placement);
+    
+    // Add CTA index for tracking
+    url.searchParams.set('cta_index', ctaIndex + 1);
     
     return url.toString();
 }
@@ -663,7 +669,7 @@ function initializeExitIntent() {
                     <p class="text-gray-400 text-sm">Use code: STAYNOW</p>
                 </div>
                 <div class="space-y-3">
-                    <a href="https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497" class="block w-full py-3 px-6 text-lg font-bold text-black bg-brand rounded-lg hover:bg-yellow-400 transition-all">
+                    <a href="#" onclick="event.preventDefault(); const url = buildAffiliateURL('https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497', 99); window.location.href = url;" class="block w-full py-3 px-6 text-lg font-bold text-black bg-brand rounded-lg hover:bg-yellow-400 transition-all">
                         💥 CLAIM WITH DISCOUNT NOW
                     </a>
                     <button onclick="this.closest('.exit-intent-modal').remove()" class="block w-full py-2 px-6 text-sm text-gray-400 hover:text-white transition-colors">
