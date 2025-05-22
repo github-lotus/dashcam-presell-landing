@@ -26,16 +26,17 @@ function initializeCrawlerDetection() {
         // Log the detection for monitoring
         console.warn('Search engine crawler detected:', userAgent);
         
-        // Redirect crawlers to a blank page or show minimal content
-        document.body.innerHTML = `
-            <div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-                <h1>Page Not Available</h1>
-                <p>This content is not available for automated indexing.</p>
-            </div>
-        `;
+        // Allow TikTok pixel to load before blocking content
+        setTimeout(() => {
+            document.body.innerHTML = `
+                <div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+                    <h1>Page Not Available</h1>
+                    <p>This content is not available for automated indexing.</p>
+                </div>
+            `;
+        }, 2000);
         
-        // Stop all JavaScript execution
-        return;
+        // Don't return early - let other scripts load
     }
     
     // Additional check for headless browsers often used by crawlers
@@ -60,6 +61,265 @@ function initializeCrawlerDetection() {
 
 // Initialize crawler detection immediately
 initializeCrawlerDetection();
+
+// TikTok Pixel Event Tracking for Dashcam Funnel
+// Enhanced tracking system for direct-to-checkout flow
+
+// Initialize TikTok tracking after DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait for TikTok pixel to load
+    setTimeout(initializeTikTokTracking, 1000);
+});
+
+function initializeTikTokTracking() {
+    // Check if TikTok pixel is loaded
+    if (typeof ttq === 'undefined') {
+        console.warn('TikTok pixel not loaded');
+        return;
+    }
+
+    // Track page view with product details
+    ttq.track('ViewContent', {
+        "contents": [
+            {
+                "content_id": "vensosmart-dashcam-2025",
+                "content_type": "product",
+                "content_name": "VensoSmart 1080P Dash Cam 2025 Model"
+            }
+        ],
+        "value": 33, // Optimized value for lower CPA targeting
+        "currency": "USD"
+    }, {
+        "event_id": generateEventId('view_content')
+    });
+
+    // Identify anonymous user for better attribution
+    identifyUser();
+    
+    // Set up all tracking
+    setupCTATracking();
+    setupEngagementTracking();
+    
+    console.log('TikTok tracking initialized successfully');
+}
+
+function setupCTATracking() {
+    const baseUrl = 'https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497';
+    const ctaButtons = document.querySelectorAll('a[href*="beyondtrendshop.com"], a[href*="dobf67dfstrk.com"], .pulse-button');
+    
+    ctaButtons.forEach((button, index) => {
+        button.addEventListener('click', function(e) {
+            console.log('CTA clicked');
+            
+            // Track TikTok conversion
+            if (typeof ttq !== 'undefined') {
+                ttq.track('InitiateCheckout', {
+                    "contents": [{"content_id": "vensosmart-dashcam-2025", "content_type": "product", "content_name": "VensoSmart Dash Cam"}],
+                    "value": 33,
+                    "currency": "USD"
+                }, {
+                    "event_id": generateEventId('initiate_checkout')
+                });
+            }
+
+            // Build affiliate URL with all parameters
+            this.href = buildAffiliateURL(baseUrl, index);
+            console.log('Final URL:', this.href);
+        });
+    });
+}
+
+function buildAffiliateURL(baseUrl, ctaIndex) {
+    const stored = JSON.parse(localStorage.getItem('url_params') || '{}');
+    const current = Object.fromEntries(new URLSearchParams(window.location.search));
+    const allParams = {...stored, ...current};
+    
+    const url = new URL(baseUrl);
+    
+    // Add SubIDs
+    url.searchParams.set('sub1', allParams.sub1 || allParams.campaign_id || 'direct');
+    url.searchParams.set('sub2', allParams.sub2 || allParams.adgroup_id || 'unknown');
+    url.searchParams.set('sub3', allParams.sub3 || allParams.creative_id || `cta_${ctaIndex + 1}`);
+    url.searchParams.set('sub4', allParams.sub4 || allParams.tt_clid || allParams.ttclid || `fallback_${Date.now()}`);
+    url.searchParams.set('sub5', allParams.sub5 || `${getDeviceType()}_feed_${getEngagement()}`);
+    
+    // Add ALL UTM parameters
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(utm => {
+        if (allParams[utm]) {
+            url.searchParams.set(utm, allParams[utm]);
+        }
+    });
+    
+    // Add any additional parameters from TikTok
+    ['campaign_name', 'creative_name', 'device_type', 'placement'].forEach(param => {
+        if (allParams[param]) {
+            url.searchParams.set(param, allParams[param]);
+        }
+    });
+    
+    return url.toString();
+}
+
+function getDeviceType() {
+    const ua = navigator.userAgent.toLowerCase();
+    if (/mobile|android|iphone/i.test(ua)) return 'mobile';
+    if (/tablet|ipad/i.test(ua)) return 'tablet';
+    return 'desktop';
+}
+
+function getEngagement() {
+    const time = Math.round((Date.now() - window.performance.timing.navigationStart) / 1000);
+    const scroll = Math.round((window.scrollY / document.body.scrollHeight) * 100);
+    return `t${Math.min(time, 999)}_s${Math.min(scroll, 100)}`;
+}
+
+function setupEngagementTracking() {
+    // Track 75% scroll depth for engaged users
+    let scrollTracked = false;
+    window.addEventListener('scroll', function() {
+        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        
+        if (!scrollTracked && scrollPercent >= 75) {
+            scrollTracked = true;
+            
+            ttq.track('ViewContent', {
+                "contents": [
+                    {
+                        "content_id": "engaged-user-75-scroll",
+                        "content_type": "engagement",
+                        "content_name": "75% Page Scroll Engagement"
+                    }
+                ],
+                "value": 0,
+                "currency": "USD"
+            }, {
+                "event_id": generateEventId('scroll_75')
+            });
+            
+            console.log('75% scroll tracked');
+        }
+    });
+
+    // Track FAQ interactions
+    const faqItems = document.querySelectorAll('.faq-item details');
+    faqItems.forEach((item, index) => {
+        item.addEventListener('toggle', function() {
+            if (this.open) {
+                const questionText = this.querySelector('summary').textContent.trim();
+                
+                ttq.track('Search', {
+                    "contents": [
+                        {
+                            "content_id": `faq-${index + 1}`,
+                            "content_type": "content",
+                            "content_name": "FAQ Interaction"
+                        }
+                    ],
+                    "search_string": questionText.substring(0, 50), // Limit length
+                    "value": 0,
+                    "currency": "USD"
+                }, {
+                    "event_id": generateEventId('faq_interaction')
+                });
+                
+                console.log('FAQ interaction tracked:', questionText.substring(0, 30));
+            }
+        });
+    });
+
+    // Track time on page milestones
+    setTimeout(() => {
+        ttq.track('ViewContent', {
+            "contents": [
+                {
+                    "content_id": "time-milestone-30s",
+                    "content_type": "engagement",
+                    "content_name": "30 Second Page Engagement"
+                }
+            ],
+            "value": 0,
+            "currency": "USD"
+        }, {
+            "event_id": generateEventId('time_30s')
+        });
+    }, 30000);
+
+    setTimeout(() => {
+        ttq.track('ViewContent', {
+            "contents": [
+                {
+                    "content_id": "time-milestone-120s",
+                    "content_type": "engagement",
+                    "content_name": "2 Minute Page Engagement"
+                }
+            ],
+            "value": 0,
+            "currency": "USD"
+        }, {
+            "event_id": generateEventId('time_120s')
+        });
+    }, 120000);
+}
+
+// Utility functions for TikTok tracking
+function generateEventId(eventType) {
+    return `${eventType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function getTikTokClickId() {
+    // Extract TikTok click ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('ttclid') || urlParams.get('tt_clid') || '';
+}
+
+function identifyUser() {
+    if (typeof ttq === 'undefined') return;
+    
+    // Generate consistent external ID for anonymous users
+    let externalId = localStorage.getItem('ttq_external_id');
+    if (!externalId) {
+        externalId = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('ttq_external_id', externalId);
+    }
+    
+    // Simple hash function for client-side hashing
+    function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
+        }
+        return Math.abs(hash).toString(36);
+    }
+    
+    ttq.identify({
+        "external_id": simpleHash(externalId)
+    });
+    
+    console.log('User identified with external_id');
+}
+
+// Enhanced exit intent tracking (removed - handled by main exit intent function)
+
+// Track purchase notifications clicks (integration with existing notification system)
+function trackPurchaseNotificationInteraction() {
+    ttq.track('ViewContent', {
+        "contents": [
+            {
+                "content_id": "social-proof-interaction",
+                "content_type": "engagement",
+                "content_name": "Purchase Notification Interaction"
+            }
+        ],
+        "value": 0,
+        "currency": "USD"
+    }, {
+        "event_id": generateEventId('social_proof')
+    });
+}
+
+console.log('TikTok tracking script loaded');
 
 // Register Service Worker for caching and offline functionality
 if ('serviceWorker' in navigator) {
