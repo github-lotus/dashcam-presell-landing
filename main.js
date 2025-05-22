@@ -413,7 +413,6 @@ updateCountdown();
 
 // Stock counter with improved realism
 let currentStock = 54;
-const stockElements = document.querySelectorAll('#remaining-count, #remaining-count-2, #final-count');
 const stockFill = document.querySelector('.stock-fill');
 
 function updateStock() {
@@ -432,16 +431,50 @@ function updateStock() {
             currentStock -= Math.random() < 0.8 ? 1 : 2; // Occasionally decrease by 2
             if (currentStock < 1) currentStock = 1; // Never go to 0
             
-            stockElements.forEach(el => {
-                if (el) el.textContent = currentStock;
-            });
+            // Update all stock elements including dynamic ones
+            updateAllStockDisplays();
             
             if (stockFill) {
                 stockFill.style.width = `${(currentStock / 54) * 100}%`;
             }
+            
+            // Update page title
+            document.title = `FREE Dashcam - For The Next (${currentStock}) People Only...`;
         }
     } catch (error) {
         console.warn('Stock counter error:', error);
+    }
+}
+
+function updateAllStockDisplays() {
+    // Update all elements with IDs
+    const stockElements = document.querySelectorAll('#remaining-count, #remaining-count-2, #final-count');
+    stockElements.forEach(el => {
+        if (el) el.textContent = currentStock;
+    });
+    
+    // Update all elements with class
+    const remainingStockElements = document.querySelectorAll('.remaining-stock');
+    remainingStockElements.forEach(el => {
+        if (el) el.textContent = currentStock;
+    });
+    
+    // Update static text that contains "54 LEFT"
+    const ctaButton = document.querySelector('.sticky-cta a');
+    if (ctaButton && ctaButton.textContent.includes('LEFT')) {
+        ctaButton.textContent = `CLAIM FREE DASH CAM - ${currentStock} LEFT`;
+    }
+    
+    // Update primary CTA button
+    const primaryCta = document.querySelector('a[href*="dobf67dfstrk.com"]:first-of-type');
+    if (primaryCta && primaryCta.textContent.includes('ONLY')) {
+        primaryCta.innerHTML = `🚨 CLAIM FREE DASH CAM - ONLY ${currentStock} LEFT`;
+    }
+    
+    // Update stock bar text
+    const stockBarText = document.querySelector('.stock-bar + span');
+    if (stockBarText) {
+        stockBarText.innerHTML = `<span class="text-xs font-bold text-white">${currentStock} LEFT</span>`;
     }
 }
 
@@ -476,10 +509,7 @@ function setupFAQAccordion() {
 
 // Standardize all stock numbers
 function standardizeStockNumbers() {
-    const stockElements = document.querySelectorAll('#remaining-count, #remaining-count-2, #final-count, .stock-display');
-    stockElements.forEach(el => {
-        if (el) el.textContent = '54';
-    });
+    updateAllStockDisplays();
 }
 
 // Image loading state management
