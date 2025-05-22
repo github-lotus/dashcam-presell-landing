@@ -166,30 +166,27 @@ function buildAffiliateURL(baseUrl, ctaIndex) {
     const current = Object.fromEntries(new URLSearchParams(window.location.search));
     const allParams = {...stored, ...current};
     
-    const url = new URL(baseUrl);
+    // For beyondtrendshop checkout
+    const checkoutUrl = 'https://www.beyondtrendshop.com/COH-95T/dash-cam/mobile/checkout.php';
+    const url = new URL(checkoutUrl);
     
-    // Add SubIDs
-    url.searchParams.set('sub1', allParams.sub1 || allParams.campaign_id || 'direct');
-    url.searchParams.set('sub2', allParams.sub2 || allParams.adgroup_id || 'unknown');
-    url.searchParams.set('sub3', allParams.sub3 || allParams.creative_id || `cta_${ctaIndex + 1}`);
-    url.searchParams.set('sub4', allParams.sub4 || allParams.tt_clid || allParams.ttclid || `fallback_${Date.now()}`);
-    url.searchParams.set('sub5', allParams.sub5 || `${getDeviceType()}_feed_${getEngagement()}`);
+    // Add parameters in the format they expect
+    url.searchParams.set('AFFID', '32'); // Your affiliate ID
+    url.searchParams.set('C1', allParams.campaign_id || allParams.sub1 || 'direct');
+    url.searchParams.set('C2', allParams.adgroup_id || allParams.sub2 || 'unknown');
+    url.searchParams.set('C3', allParams.creative_id || allParams.sub3 || `cta_${ctaIndex + 1}`);
+    url.searchParams.set('C4', allParams.tt_clid || allParams.ttclid || '');
+    url.searchParams.set('C5', `${allParams.device_type || getDeviceType()}_${allParams.placement || 'unknown'}`);
     
-    // Add ALL UTM parameters
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(utm => {
-        if (allParams[utm]) {
-            url.searchParams.set(utm, allParams[utm]);
-        }
-    });
-    
-    // Add any additional parameters from TikTok
-    ['campaign_name', 'creative_name', 'device_type', 'placement'].forEach(param => {
-        if (allParams[param]) {
-            url.searchParams.set(param, allParams[param]);
-        }
-    });
+    // Generate a proper click ID
+    const clickId = allParams.tt_clid || allParams.ttclid || generateClickId();
+    url.searchParams.set('click_id', clickId);
     
     return url.toString();
+}
+
+function generateClickId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
 function getDeviceType() {
