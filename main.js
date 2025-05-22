@@ -220,7 +220,7 @@ function setupEngagementTracking() {
                 "contents": [
                     {
                         "content_id": "engaged-user-75-scroll",
-                        "content_type": "engagement",
+                        "content_type": "product",
                         "content_name": "75% Page Scroll Engagement"
                     }
                 ],
@@ -249,7 +249,7 @@ function setupEngagementTracking() {
                     "contents": [
                         {
                             "content_id": `faq-${index + 1}`,
-                            "content_type": "content",
+                            "content_type": "product",
                             "content_name": "FAQ Interaction"
                         }
                     ],
@@ -273,7 +273,7 @@ function setupEngagementTracking() {
             "contents": [
                 {
                     "content_id": "time-milestone-30s",
-                    "content_type": "engagement",
+                    "content_type": "product",
                     "content_name": "30 Second Page Engagement"
                 }
             ],
@@ -291,7 +291,7 @@ function setupEngagementTracking() {
             "contents": [
                 {
                     "content_id": "time-milestone-120s",
-                    "content_type": "engagement",
+                    "content_type": "product",
                     "content_name": "2 Minute Page Engagement"
                 }
             ],
@@ -352,7 +352,7 @@ function trackPurchaseNotificationInteraction() {
         "contents": [
             {
                 "content_id": "social-proof-interaction",
-                "content_type": "engagement",
+                "content_type": "product",
                 "content_name": "Purchase Notification Interaction"
             }
         ],
