@@ -128,10 +128,10 @@ h1, h2, h3, .headline {
 .badge {
     background: var(--accent);
     color: white;
-    padding: 2px 8px;
+    padding: 2px 26px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 30px;
+    font-weight: 900;
     display: inline-block;
     transform: rotate(-2deg);
 }
