@@ -1,6 +1,6 @@
 // Landing page functionality
 
-// Search engine crawler detection and blocking (must be first)
+// Search engine crawler detection and blocking
 function initializeCrawlerDetection() {
     const crawlerPatterns = [
         /googlebot/i,
@@ -23,23 +23,13 @@ function initializeCrawlerDetection() {
     const isCrawler = crawlerPatterns.some(pattern => pattern.test(userAgent));
     
     if (isCrawler) {
-        // Log the detection for monitoring
         console.warn('Search engine crawler detected:', userAgent);
-        
-        // Allow TikTok pixel to load before blocking content
-        setTimeout(() => {
-            document.body.innerHTML = `
-                <div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-                    <h1>Page Not Available</h1>
-                    <p>This content is not available for automated indexing.</p>
-                </div>
-            `;
-        }, 2000);
-        
-        // Don't return early - let other scripts load
+        // Hide content instead of destroying it
+        document.body.style.visibility = 'hidden';
+        return; // Exit early
     }
     
-    // Additional check for headless browsers often used by crawlers
+    // Additional check for headless browsers
     const isHeadless = (
         navigator.webdriver ||
         window.navigator.webdriver ||
@@ -51,20 +41,11 @@ function initializeCrawlerDetection() {
     
     if (isHeadless) {
         console.warn('Headless browser detected');
-        // Optionally redirect or show limited content
-        document.body.style.display = 'none';
-        setTimeout(() => {
-            document.body.style.display = 'block';
-        }, 2000); // Delay content display to discourage automated scraping
+        document.body.style.visibility = 'hidden';
     }
 }
 
-// Delay crawler detection to prevent interference with TikTok pixel
-// This gives the pixel time to load and fire initial events
-setTimeout(initializeCrawlerDetection, 5000);
-
 // TikTok Pixel Event Tracking for Dashcam Funnel
-// Enhanced tracking system for direct-to-checkout flow
 
 // Robust TikTok pixel loading check with retry mechanism
 function waitForTikTokPixel(callback, maxAttempts = 20) {
@@ -84,10 +65,29 @@ function waitForTikTokPixel(callback, maxAttempts = 20) {
     }, 500); // Check every 500ms
 }
 
-// Initialize TikTok tracking after DOM is loaded
+// Initialize everything after DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Use robust loading check instead of simple timeout
+    // Initialize TikTok tracking
     waitForTikTokPixel(initializeTikTokTracking);
+    
+    // Initialize crawler detection after delay
+    setTimeout(initializeCrawlerDetection, 5000);
+    
+    // Initialize other features
+    if (stockFill) {
+        stockFill.style.width = `${(currentStock / 54) * 100}%`;
+    }
+    
+    setupFAQAccordion();
+    standardizeStockNumbers();
+    initializeImageLoading();
+    initializeAnimationOptimizations();
+    
+    // Initialize purchase notifications after delay
+    setTimeout(initializePurchaseNotifications, 5000);
+    
+    // Initialize exit intent detection after user has been on page for 15 seconds
+    setTimeout(initializeExitIntent, 15000);
 });
 
 function initializeTikTokTracking() {
@@ -106,23 +106,8 @@ function initializeTikTokTracking() {
     console.log('Initializing TikTok tracking...');
     
     try {
-        // Track page view with product details
-        ttq.track('ViewContent', {
-        "contents": [
-            {
-                content_type: 'product',
-                content_id: 'vensosmart-dashcam-2025',
-                content_name: 'VensoSmart 2025 Dashcam',
-                price: 0.00,
-                quantity: 1
-            }
-        ],
-        "value": 33, // Optimized value for lower CPA targeting
-        "currency": "USD"
-    }, {
-        "event_id": generateEventId('view_content')
-    });
-
+        // ViewContent is now fired in HTML, so we don't need it here
+        
         // Identify anonymous user for better attribution
         identifyUser();
         
@@ -142,22 +127,35 @@ function setupCTATracking() {
     
     ctaButtons.forEach((button, index) => {
         button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent immediate navigation
             console.log('CTA clicked');
+            
+            const finalUrl = buildAffiliateURL(baseUrl, index);
             
             // Track TikTok conversion
             if (typeof ttq !== 'undefined') {
                 ttq.track('InitiateCheckout', {
-                    "contents": [{"content_id": "vensosmart-dashcam-2025", "content_type": "product", "content_name": "VensoSmart Dash Cam"}],
+                    "contents": [{
+                        "content_id": "vensosmart-dashcam-2025", 
+                        "content_type": "product", 
+                        "content_name": "VensoSmart Dash Cam",
+                        "quantity": 1,
+                        "price": 0.00
+                    }],
                     "value": 33,
                     "currency": "USD"
                 }, {
                     "event_id": generateEventId('initiate_checkout')
                 });
+                
+                // Navigate after a short delay to ensure tracking fires
+                setTimeout(() => {
+                    window.location.href = finalUrl;
+                }, 300);
+            } else {
+                // If pixel not loaded, navigate immediately
+                window.location.href = finalUrl;
             }
-
-            // Build affiliate URL with all parameters
-            this.href = buildAffiliateURL(baseUrl, index);
-            console.log('Final URL:', this.href);
         });
     });
 }
@@ -217,16 +215,14 @@ function setupEngagementTracking() {
             
             if (typeof ttq !== 'undefined') {
                 ttq.track('ViewContent', {
-                "contents": [
-                    {
+                    "contents": [{
                         "content_id": "engaged-user-75-scroll",
                         "content_type": "product",
                         "content_name": "75% Page Scroll Engagement"
-                    }
-                ],
-                "value": 0,
-                "currency": "USD"
-            }, {
+                    }],
+                    "value": 0,
+                    "currency": "USD"
+                }, {
                     "event_id": generateEventId('scroll_75')
                 });
                 
@@ -246,17 +242,15 @@ function setupEngagementTracking() {
                 
                 if (typeof ttq !== 'undefined') {
                     ttq.track('Search', {
-                    "contents": [
-                        {
+                        "contents": [{
                             "content_id": `faq-${index + 1}`,
                             "content_type": "product",
                             "content_name": "FAQ Interaction"
-                        }
-                    ],
-                    "search_string": questionText.substring(0, 50), // Limit length
-                    "value": 0,
-                    "currency": "USD"
-                }, {
+                        }],
+                        "search_string": questionText.substring(0, 50), // Limit length
+                        "value": 0,
+                        "currency": "USD"
+                    }, {
                         "event_id": generateEventId('faq_interaction')
                     });
                     
@@ -270,16 +264,14 @@ function setupEngagementTracking() {
     setTimeout(() => {
         if (typeof ttq !== 'undefined') {
             ttq.track('ViewContent', {
-            "contents": [
-                {
+                "contents": [{
                     "content_id": "time-milestone-30s",
                     "content_type": "product",
                     "content_name": "30 Second Page Engagement"
-                }
-            ],
-            "value": 0,
-            "currency": "USD"
-        }, {
+                }],
+                "value": 0,
+                "currency": "USD"
+            }, {
                 "event_id": generateEventId('time_30s')
             });
         }
@@ -288,16 +280,14 @@ function setupEngagementTracking() {
     setTimeout(() => {
         if (typeof ttq !== 'undefined') {
             ttq.track('ViewContent', {
-            "contents": [
-                {
+                "contents": [{
                     "content_id": "time-milestone-120s",
                     "content_type": "product",
                     "content_name": "2 Minute Page Engagement"
-                }
-            ],
-            "value": 0,
-            "currency": "USD"
-        }, {
+                }],
+                "value": 0,
+                "currency": "USD"
+            }, {
                 "event_id": generateEventId('time_120s')
             });
         }
@@ -343,22 +333,18 @@ function identifyUser() {
     console.log('User identified with external_id');
 }
 
-// Enhanced exit intent tracking (removed - handled by main exit intent function)
-
-// Track purchase notifications clicks (integration with existing notification system)
+// Track purchase notifications clicks
 function trackPurchaseNotificationInteraction() {
     if (typeof ttq !== 'undefined') {
         ttq.track('ViewContent', {
-        "contents": [
-            {
+            "contents": [{
                 "content_id": "social-proof-interaction",
                 "content_type": "product",
                 "content_name": "Purchase Notification Interaction"
-            }
-        ],
-        "value": 0,
-        "currency": "USD"
-    }, {
+            }],
+            "value": 0,
+            "currency": "USD"
+        }, {
             "event_id": generateEventId('social_proof')
         });
     }
@@ -374,7 +360,7 @@ window.checkTikTokPixel = function() {
         console.log('ttq object:', ttq);
         console.log('ttq methods:', Object.keys(ttq));
     }
-    console.log('Crawler detection active:', document.body.innerHTML.includes('Page Not Available'));
+    console.log('Crawler detection active:', document.body.style.visibility === 'hidden');
     console.log('================================');
 };
 
@@ -395,7 +381,7 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('scroll', function() {
     const stickyCta = document.querySelector('.sticky-cta');
     if (stickyCta) {
-        if (window.scrollY > 500) { // Changed from 300 to 500px as per optimization
+        if (window.scrollY > 500) {
             stickyCta.classList.add('visible');
         } else {
             stickyCta.classList.remove('visible');
@@ -494,31 +480,6 @@ function standardizeStockNumbers() {
         if (el) el.textContent = '54';
     });
 }
-
-// Initialize stock bar on page load
-document.addEventListener('DOMContentLoaded', function() {
-    if (stockFill) {
-        stockFill.style.width = `${(currentStock / 54) * 100}%`;
-    }
-    
-    // Setup FAQ accordion behavior
-    setupFAQAccordion();
-    
-    // Standardize stock numbers
-    standardizeStockNumbers();
-    
-    // Initialize image loading states
-    initializeImageLoading();
-    
-    // Initialize animation performance optimizations
-    initializeAnimationOptimizations();
-    
-    // Initialize purchase notifications after delay
-    setTimeout(initializePurchaseNotifications, 5000);
-    
-    // Initialize exit intent detection after user has been on page for 15 seconds
-    setTimeout(initializeExitIntent, 15000);
-});
 
 // Image loading state management
 function initializeImageLoading() {
@@ -719,4 +680,3 @@ function initializeExitIntent() {
         }
     }, 60000);
 }
-
