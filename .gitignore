@@ -39,3 +39,9 @@ build/
 
 # Personal workspace files
 *.code-workspace
+
+# Internal development files (should not be on production server)
+TASKLIST.md
+ANALYSIS.md
+CLAUDE.md
+offer_page_copy.md
