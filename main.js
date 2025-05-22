@@ -59,32 +59,62 @@ function initializeCrawlerDetection() {
     }
 }
 
-// Initialize crawler detection immediately
-initializeCrawlerDetection();
+// Delay crawler detection to prevent interference with TikTok pixel
+// This gives the pixel time to load and fire initial events
+setTimeout(initializeCrawlerDetection, 5000);
 
 // TikTok Pixel Event Tracking for Dashcam Funnel
 // Enhanced tracking system for direct-to-checkout flow
 
+// Robust TikTok pixel loading check with retry mechanism
+function waitForTikTokPixel(callback, maxAttempts = 20) {
+    let attempts = 0;
+    const checkInterval = setInterval(() => {
+        attempts++;
+        if (typeof ttq !== 'undefined') {
+            clearInterval(checkInterval);
+            console.log('TikTok pixel loaded successfully after ' + attempts + ' attempts');
+            callback();
+        } else if (attempts >= maxAttempts) {
+            clearInterval(checkInterval);
+            console.error('TikTok pixel failed to load after ' + maxAttempts + ' attempts');
+            // Still try to initialize in case pixel loads later
+            callback();
+        }
+    }, 500); // Check every 500ms
+}
+
 // Initialize TikTok tracking after DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait for TikTok pixel to load
-    setTimeout(initializeTikTokTracking, 1000);
+    // Use robust loading check instead of simple timeout
+    waitForTikTokPixel(initializeTikTokTracking);
 });
 
 function initializeTikTokTracking() {
     // Check if TikTok pixel is loaded
     if (typeof ttq === 'undefined') {
-        console.warn('TikTok pixel not loaded');
+        console.warn('TikTok pixel not loaded - attempting delayed initialization');
+        // Try again after 2 seconds
+        setTimeout(() => {
+            if (typeof ttq !== 'undefined') {
+                initializeTikTokTracking();
+            }
+        }, 2000);
         return;
     }
 
-    // Track page view with product details
-    ttq.track('ViewContent', {
+    console.log('Initializing TikTok tracking...');
+    
+    try {
+        // Track page view with product details
+        ttq.track('ViewContent', {
         "contents": [
             {
-                "content_id": "vensosmart-dashcam-2025",
-                "content_type": "product",
-                "content_name": "VensoSmart 1080P Dash Cam 2025 Model"
+                content_type: 'product',
+                content_id: 'vensosmart-dashcam-2025',
+                content_name: 'VensoSmart 2025 Dashcam',
+                price: 0.00,
+                quantity: 1
             }
         ],
         "value": 33, // Optimized value for lower CPA targeting
@@ -93,14 +123,17 @@ function initializeTikTokTracking() {
         "event_id": generateEventId('view_content')
     });
 
-    // Identify anonymous user for better attribution
-    identifyUser();
-    
-    // Set up all tracking
-    setupCTATracking();
-    setupEngagementTracking();
-    
-    console.log('TikTok tracking initialized successfully');
+        // Identify anonymous user for better attribution
+        identifyUser();
+        
+        // Set up all tracking
+        setupCTATracking();
+        setupEngagementTracking();
+        
+        console.log('TikTok tracking initialized successfully');
+    } catch (error) {
+        console.error('Error initializing TikTok tracking:', error);
+    }
 }
 
 function setupCTATracking() {
@@ -182,7 +215,8 @@ function setupEngagementTracking() {
         if (!scrollTracked && scrollPercent >= 75) {
             scrollTracked = true;
             
-            ttq.track('ViewContent', {
+            if (typeof ttq !== 'undefined') {
+                ttq.track('ViewContent', {
                 "contents": [
                     {
                         "content_id": "engaged-user-75-scroll",
@@ -193,10 +227,13 @@ function setupEngagementTracking() {
                 "value": 0,
                 "currency": "USD"
             }, {
-                "event_id": generateEventId('scroll_75')
-            });
-            
-            console.log('75% scroll tracked');
+                    "event_id": generateEventId('scroll_75')
+                });
+                
+                console.log('75% scroll tracked');
+            } else {
+                console.warn('TikTok pixel not available for scroll tracking');
+            }
         }
     });
 
@@ -207,7 +244,8 @@ function setupEngagementTracking() {
             if (this.open) {
                 const questionText = this.querySelector('summary').textContent.trim();
                 
-                ttq.track('Search', {
+                if (typeof ttq !== 'undefined') {
+                    ttq.track('Search', {
                     "contents": [
                         {
                             "content_id": `faq-${index + 1}`,
@@ -219,17 +257,19 @@ function setupEngagementTracking() {
                     "value": 0,
                     "currency": "USD"
                 }, {
-                    "event_id": generateEventId('faq_interaction')
-                });
-                
-                console.log('FAQ interaction tracked:', questionText.substring(0, 30));
+                        "event_id": generateEventId('faq_interaction')
+                    });
+                    
+                    console.log('FAQ interaction tracked:', questionText.substring(0, 30));
+                }
             }
         });
     });
 
     // Track time on page milestones
     setTimeout(() => {
-        ttq.track('ViewContent', {
+        if (typeof ttq !== 'undefined') {
+            ttq.track('ViewContent', {
             "contents": [
                 {
                     "content_id": "time-milestone-30s",
@@ -240,12 +280,14 @@ function setupEngagementTracking() {
             "value": 0,
             "currency": "USD"
         }, {
-            "event_id": generateEventId('time_30s')
-        });
+                "event_id": generateEventId('time_30s')
+            });
+        }
     }, 30000);
 
     setTimeout(() => {
-        ttq.track('ViewContent', {
+        if (typeof ttq !== 'undefined') {
+            ttq.track('ViewContent', {
             "contents": [
                 {
                     "content_id": "time-milestone-120s",
@@ -256,8 +298,9 @@ function setupEngagementTracking() {
             "value": 0,
             "currency": "USD"
         }, {
-            "event_id": generateEventId('time_120s')
-        });
+                "event_id": generateEventId('time_120s')
+            });
+        }
     }, 120000);
 }
 
@@ -304,7 +347,8 @@ function identifyUser() {
 
 // Track purchase notifications clicks (integration with existing notification system)
 function trackPurchaseNotificationInteraction() {
-    ttq.track('ViewContent', {
+    if (typeof ttq !== 'undefined') {
+        ttq.track('ViewContent', {
         "contents": [
             {
                 "content_id": "social-proof-interaction",
@@ -315,11 +359,24 @@ function trackPurchaseNotificationInteraction() {
         "value": 0,
         "currency": "USD"
     }, {
-        "event_id": generateEventId('social_proof')
-    });
+            "event_id": generateEventId('social_proof')
+        });
+    }
 }
 
 console.log('TikTok tracking script loaded');
+
+// Debug function to check TikTok pixel status
+window.checkTikTokPixel = function() {
+    console.log('=== TikTok Pixel Status Check ===');
+    console.log('ttq defined:', typeof ttq !== 'undefined');
+    if (typeof ttq !== 'undefined') {
+        console.log('ttq object:', ttq);
+        console.log('ttq methods:', Object.keys(ttq));
+    }
+    console.log('Crawler detection active:', document.body.innerHTML.includes('Page Not Available'));
+    console.log('================================');
+};
 
 // Register Service Worker for caching and offline functionality
 if ('serviceWorker' in navigator) {
@@ -617,7 +674,7 @@ function initializeExitIntent() {
                     <p class="text-gray-400 text-sm">Use code: STAYNOW</p>
                 </div>
                 <div class="space-y-3">
-                    <a href="https://www.beyondtrendshop.com/COH-95T/dash-cam/?AFFID=test&discount=STAYNOW" class="block w-full py-3 px-6 text-lg font-bold text-black bg-brand rounded-lg hover:bg-yellow-400 transition-all">
+                    <a href="https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497" class="block w-full py-3 px-6 text-lg font-bold text-black bg-brand rounded-lg hover:bg-yellow-400 transition-all">
                         💥 CLAIM WITH DISCOUNT NOW
                     </a>
                     <button onclick="this.closest('.exit-intent-modal').remove()" class="block w-full py-2 px-6 text-sm text-gray-400 hover:text-white transition-colors">
