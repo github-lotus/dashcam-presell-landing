@@ -1,0 +1,51 @@
+{
+  "name": "Dash Cam Protection Offer",
+  "short_name": "DashCam",
+  "description": "Free 1080P HD Dash Cam for US Drivers - Protection against insurance fraud",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#ff9500",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["automotive", "security", "utilities"],
+  "icons": [
+    {
+      "src": "images/dashcam.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/dashcam.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Claim Free Dash Cam",
+      "short_name": "Claim Now",
+      "description": "Get your free dash cam protection",
+      "url": "#offer-section",
+      "icons": [
+        {
+          "src": "images/dashcam.webp",
+          "sizes": "96x96",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/dashcam.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "platform": "wide",
+      "label": "Dash Cam Landing Page"
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+/* Component Library - Modular CSS for reusable components */
+
+/* === BUTTONS === */
+.btn-primary {
+    @apply inline-block py-4 px-6 text-lg font-bold text-black bg-brand rounded-lg shadow-lg hover:bg-yellow-400 transition-all;
+}
+
+.btn-secondary {
+    @apply inline-block py-3 px-6 text-base font-bold text-black bg-brand rounded-lg shadow-lg hover:bg-yellow-400 transition-all;
+}
+
+.btn-pulse {
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 0 0 rgba(255, 149, 0, 0.7);
+}
+
+.btn-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+/* === CARDS === */
+.card-testimonial {
+    @apply bg-gray-800 p-6 rounded-lg border border-gray-700;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.card-testimonial:hover {
+    border-color: var(--brand);
+    transform: translateY(-1px);
+}
+
+.card-testimonial::before {
+    content: "\201C";
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    font-size: 60px;
+    color: var(--brand);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+}
+
+.card-stat {
+    @apply bg-gray-900 p-6 rounded-lg border border-gray-800 text-center;
+}
+
+.card-feature {
+    @apply flex items-start gap-3 bg-black/40 p-3 rounded-lg border border-gray-800;
+}
+
+/* === BADGES === */
+.badge {
+    background: var(--accent);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    transform: rotate(-2deg);
+}
+
+.badge-verified {
+    @apply bg-green-900/30 px-2 py-1 rounded text-xs text-green-400 font-medium;
+}
+
+.badge-success {
+    @apply inline-block bg-success/20 text-success px-4 py-2 rounded-full text-sm font-bold;
+}
+
+/* === FORM ELEMENTS === */
+.faq-item {
+    @apply p-4 bg-gray-800 rounded-lg border border-gray-700;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: var(--brand);
+    transform: translateY(-1px);
+}
+
+.faq-item summary {
+    @apply cursor-pointer font-medium text-white;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.faq-item summary:hover {
+    color: var(--brand);
+}
+
+/* === PROGRESS BARS === */
+.progress-bar {
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #2c2c2c 0%, #1a1a1a 100%);
+    overflow: hidden;
+    border: 1px solid #444;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--brand) 0%, #ffb700 100%);
+    transition: width 1s ease;
+}
+
+/* === ICONS === */
+.icon-feature {
+    background: rgba(255, 149, 0, 0.15);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand);
+}
+
+/* === LOADING STATES === */
+.loading-skeleton {
+    background: linear-gradient(90deg, #2c2c2c 25%, #3a3a3a 50%, #2c2c2c 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* === UTILITY CLASSES === */
+.highlight-box {
+    border: 2px dashed var(--brand);
+    background: rgba(255, 149, 0, 0.05);
+}
+
+.sticky-element {
+    transition: all 0.3s ease;
+    transform: translateY(100%);
+}
+
+.sticky-element.visible {
+    transform: translateY(0);
+}
+
+/* === RESPONSIVE MODIFIERS === */
+@media (max-width: 768px) {
+    .btn-primary,
+    .btn-secondary {
+        min-height: 48px;
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+    
+    .card-testimonial,
+    .card-stat,
+    .card-feature {
+        margin-bottom: 1rem;
+    }
+}
