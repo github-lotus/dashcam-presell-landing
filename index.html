@@ -96,6 +96,18 @@
         
         .countdown { font-variant-numeric: tabular-nums; }
         
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-block;
+            transform: rotate(-2deg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
         .sr-only {
             position: absolute;
             width: 1px;
@@ -187,10 +199,10 @@
                     <source media="(max-width: 768px)" srcset="images/dashcam.webp 320w" sizes="320px" type="image/webp">
                     <img src="images/dashcam.webp" alt="VensoSmart 1080P HD Dash Cam with Night Vision - 2025 Model" class="mx-auto max-w-[280px] drop-shadow-2xl" loading="eager" />
                 </picture>
-                <div class="absolute -top-4 -right-4 bg-accent text-white text-sm font-bold py-1 px-3 rounded-full transform rotate-12">
+                <div class="absolute -top-2 -right-2 bg-accent text-white text-lg font-bold py-2 px-4 rounded-full transform rotate-12 shadow-lg z-10">
                     FREE!
                 </div>
-                <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs py-1 px-4 rounded-full border border-gray-700">
+                <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs py-2 px-4 rounded-full border border-gray-700">
                     <span class="flex items-center gap-1">
                         <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
@@ -211,6 +223,11 @@
                         <span class="ml-1 text-gray-400">(3,912 reviews)</span>
                     </span>
                 </div>
+            
+            <!-- Add testimonial below rating -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-300 italic max-w-xs mx-auto">"This saved me from a $5,000 insurance claim!" - Sarah M.</p>
+            </div>
             
             <!-- VensoSmart Features List -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-left mt-8">
@@ -310,17 +327,17 @@
                 <p class="text-gray-400 mt-2">The scam that's costing innocent drivers thousands</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center mb-10">
-                <div class="bg-gray-900 p-6 rounded-lg border border-gray-800">
-                    <div class="text-4xl font-bold text-accent mb-2">135%</div>
-                    <p class="text-sm text-gray-300">Increase in staged accidents targeting innocent drivers</p>
+                <div class="bg-gray-900 p-6 rounded-lg border border-gray-800 shadow-lg">
+                    <div class="text-5xl font-bold text-accent mb-3">135%</div>
+                    <p class="text-base text-gray-200 font-medium leading-relaxed">Increase in staged accidents targeting innocent drivers</p>
                 </div>
-                <div class="bg-gray-900 p-6 rounded-lg border border-gray-800">
-                    <div class="text-4xl font-bold text-accent mb-2">43 sec</div>
-                    <p class="text-sm text-gray-300">Average frequency of hit-and-run incidents in the US</p>
+                <div class="bg-gray-900 p-6 rounded-lg border border-gray-800 shadow-lg">
+                    <div class="text-5xl font-bold text-accent mb-3">43 sec</div>
+                    <p class="text-base text-gray-200 font-medium leading-relaxed">Average frequency of hit-and-run incidents in the US</p>
                 </div>
-                <div class="bg-gray-900 p-6 rounded-lg border border-gray-800">
-                    <div class="text-4xl font-bold text-accent mb-2">$68,734</div>
-                    <p class="text-sm text-gray-300">Average insurance payout for collision claims</p>
+                <div class="bg-gray-900 p-6 rounded-lg border border-gray-800 shadow-lg">
+                    <div class="text-5xl font-bold text-accent mb-3">$68,734</div>
+                    <p class="text-base text-gray-200 font-medium leading-relaxed">Average insurance payout for collision claims</p>
                 </div>
             </div>
             <div class="highlight-box p-5 rounded-lg text-center">
@@ -398,13 +415,13 @@
                                                https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=96&q=80 96w,
                                                https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80 100w" 
                                         sizes="(max-width: 768px) 48px, 96px" type="image/jpeg">
-                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Professional headshot of Winfred H., satisfied VensoSmart customer" class="w-full h-full object-cover" loading="lazy" />
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Professional headshot of Sarah H., satisfied VensoSmart customer" class="w-full h-full object-cover" loading="lazy" />
                             </picture>
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h3 class="font-bold text-white">Winfred H.</h3>
+                                    <h3 class="font-bold text-white">Sarah H.</h3>
                                     <p class="text-xs text-gray-400">VensoSmart Customer</p>
                                 </div>
                                 <div class="bg-green-900/30 px-2 py-1 rounded text-xs text-green-400 font-medium">
@@ -747,7 +764,6 @@
                             <th class="text-left p-4 text-white font-bold">Feature</th>
                             <th class="text-center p-4 text-brand font-bold">VensoSmart</th>
                             <th class="text-center p-4 text-gray-400">Generic Brand</th>
-                            <th class="text-center p-4 text-gray-400">Generic Brand</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -755,42 +771,35 @@
                             <td class="p-4 text-white font-medium">Price</td>
                             <td class="p-4 text-center text-brand font-bold">FREE</td>
                             <td class="p-4 text-center text-gray-400">$199.99</td>
-                            <td class="p-4 text-center text-gray-400">$129.99</td>
                         </tr>
                         <tr class="border-b border-gray-700">
                             <td class="p-4 text-white">1080P Full HD Clarity</td>
                             <td class="p-4 text-center text-green-400">✓</td>
                             <td class="p-4 text-center text-red-400">✗</td>
-                            <td class="p-4 text-center text-green-400">✓</td>
                         </tr>
                         <tr class="border-b border-gray-700">
                             <td class="p-4 text-white">Front & Rear Camera</td>
                             <td class="p-4 text-center text-green-400">✓</td>
-                            <td class="p-4 text-center text-red-400">✗</td>
                             <td class="p-4 text-center text-red-400">✗</td>
                         </tr>
                         <tr class="border-b border-gray-700">
                             <td class="p-4 text-white">170° Wide Angle View</td>
                             <td class="p-4 text-center text-green-400">✓</td>
                             <td class="p-4 text-center text-green-400">✓</td>
-                            <td class="p-4 text-center text-red-400">✗</td>
                         </tr>
                         <tr class="border-b border-gray-700">
                             <td class="p-4 text-white">G-Sensor Enabled</td>
                             <td class="p-4 text-center text-green-400">✓</td>
                             <td class="p-4 text-center text-red-400">✗</td>
-                            <td class="p-4 text-center text-green-400">✓</td>
                         </tr>
                         <tr class="border-b border-gray-700">
                             <td class="p-4 text-white">Smart Motion Detection</td>
                             <td class="p-4 text-center text-green-400">✓</td>
                             <td class="p-4 text-center text-red-400">✗</td>
-                            <td class="p-4 text-center text-red-400">✗</td>
                         </tr>
                         <tr>
                             <td class="p-4 text-white">24/7 Parking Monitor</td>
                             <td class="p-4 text-center text-green-400">✓</td>
-                            <td class="p-4 text-center text-red-400">✗</td>
                             <td class="p-4 text-center text-red-400">✗</td>
                         </tr>
                     </tbody>
@@ -821,7 +830,10 @@
                     </div>
                     <div class="md:w-2/3">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">VensoSmart 1080P Dash Cam <span class="text-sm text-brand">(2025 Model)</span></h3>
+                            <h3 class="text-xl font-bold text-white">
+                                VensoSmart <span class="text-sm text-brand">(2025 Model)</span><br>
+                                <span class="text-lg text-gray-100 font-semibold">1080P Dashcam</span>
+                            </h3>
                             <div class="flex items-center">
                                 <span class="text-gray-400 line-through mr-2">$185.69</span>
                                 <span class="text-2xl font-bold text-brand">FREE</span>
@@ -867,7 +879,7 @@
                             </div>
                             <span class="text-xs font-bold text-white">54 LEFT</span>
                         </div>
-                        <a href="https://www.beyondtrendshop.com/COH-95T/dash-cam/?AFFID=test" class="block w-full py-4 px-6 text-lg font-bold text-black bg-brand rounded-lg shadow-lg hover:bg-yellow-400 transition-all pulse-button text-center shine">
+                        <a href="https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497" class="block w-full py-4 px-6 text-lg font-bold text-black bg-brand rounded-lg shadow-lg hover:bg-yellow-400 transition-all pulse-button text-center shine">
                             💥 CLAIM YOURS BEFORE THEY'RE GONE
                         </a>
                     </div>
@@ -996,7 +1008,7 @@
         <div class="max-w-screen-md mx-auto px-5 text-center">
             <h2 class="text-3xl font-bold mb-4">Don't Wait Until It's Too Late</h2>
             <p class="text-lg mb-6">Join the 3,912 drivers who protected themselves this month</p>
-            <a href="https://www.beyondtrendshop.com/COH-95T/dash-cam/?AFFID=test" class="inline-block py-4 px-8 text-lg font-bold text-white bg-black rounded-lg shadow-lg hover:bg-gray-900 transition-all shine">
+            <a href="https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497" class="inline-block py-4 px-8 text-lg font-bold text-white bg-black rounded-lg shadow-lg hover:bg-gray-900 transition-all shine">
                 CLAIM MY FREE DASH CAM NOW
             </a>
             <p class="mt-4 text-sm">Only <span id="final-count" class="font-bold">54</span> units remaining in this batch</p>

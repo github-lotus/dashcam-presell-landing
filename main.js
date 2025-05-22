@@ -412,11 +412,43 @@ function startStockUpdates() {
 
 startStockUpdates();
 
+// FAQ Accordion - Only one open at a time
+function setupFAQAccordion() {
+    const faqItems = document.querySelectorAll('.faq-item details');
+    
+    faqItems.forEach(item => {
+        item.addEventListener('toggle', function() {
+            if (this.open) {
+                // Close all other FAQ items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== this && otherItem.open) {
+                        otherItem.open = false;
+                    }
+                });
+            }
+        });
+    });
+}
+
+// Standardize all stock numbers
+function standardizeStockNumbers() {
+    const stockElements = document.querySelectorAll('#remaining-count, #remaining-count-2, #final-count, .stock-display');
+    stockElements.forEach(el => {
+        if (el) el.textContent = '54';
+    });
+}
+
 // Initialize stock bar on page load
 document.addEventListener('DOMContentLoaded', function() {
     if (stockFill) {
         stockFill.style.width = `${(currentStock / 54) * 100}%`;
     }
+    
+    // Setup FAQ accordion behavior
+    setupFAQAccordion();
+    
+    // Standardize stock numbers
+    standardizeStockNumbers();
     
     // Initialize image loading states
     initializeImageLoading();
