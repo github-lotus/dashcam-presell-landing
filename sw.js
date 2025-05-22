@@ -51,7 +51,7 @@ self.addEventListener('fetch', event => {
     // Skip external analytics and tracking requests
     if (event.request.url.includes('google-analytics') || 
         event.request.url.includes('facebook') ||
-        event.request.url.includes('beyondtrendshop.com')) {
+        event.request.url.includes('dobf67dfstrk.com')) {
         return;
     }
     

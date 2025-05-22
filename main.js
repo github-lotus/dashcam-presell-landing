@@ -123,7 +123,7 @@ function initializeTikTokTracking() {
 
 function setupCTATracking() {
     const baseUrl = 'https://www.dobf67dfstrk.com/2FMZLP/3RC4RS9/?uid=1497';
-    const ctaButtons = document.querySelectorAll('a[href*="beyondtrendshop.com"], a[href*="dobf67dfstrk.com"], .pulse-button');
+    const ctaButtons = document.querySelectorAll('a[href*="dobf67dfstrk.com"], .pulse-button');
     
     ctaButtons.forEach((button, index) => {
         button.addEventListener('click', function(e) {
@@ -131,6 +131,7 @@ function setupCTATracking() {
             console.log('CTA clicked');
             
             const finalUrl = buildAffiliateURL(baseUrl, index);
+            console.log('Final URL being navigated to:', finalUrl);
             
             // Track TikTok conversion
             if (typeof ttq !== 'undefined') {
