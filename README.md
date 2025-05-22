@@ -1,10 +1,10 @@
-# VensoSmart Dashcam Landing Page
+# Dashcam Presell Landing Page Template
 
-A high-converting single-page advertorial landing page for VensoSmart Dashcam promotion, designed for cold traffic acquisition and direct-response marketing.
+A high-converting single-page advertorial template for dashcam promotions, designed for cold traffic acquisition and A/B testing with interchangeable brand content.
 
 ## 🚗 Project Overview
 
-This is a standalone HTML landing page that promotes a free VensoSmart Dashcam offer. The page is optimized for conversion with psychological triggers, social proof, and urgency elements.
+This is a flexible standalone HTML landing page template for dashcam offers. Currently configured with VensoSmart branding but easily adaptable for split testing different dashcam brands and offers. The page is optimized for conversion with psychological triggers, social proof, and urgency elements.
 
 ## ✨ Key Features
 
